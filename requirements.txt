@@ -4,3 +4,4 @@ groq
 qrcode
 pillow
 requests
+google-generativeai
