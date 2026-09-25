@@ -39,16 +39,16 @@ def parse_cihaz_bilgi(user_agent):
 
 def get_sistem_prompt():
     saat = datetime.now().hour
-    if 6 <= saat < 12: selamlama = "Günaydın"
-    elif 12 <= saat < 18: selamlama = "İyi günler"
-    elif 18 <= saat < 22: selamlama = "İyi akşamlar"
-    else: selamlama = "İyi geceler"
-    return f"""Sen NexBridge adlı bir asistansın.
-KESİNLİKLE SADECE TÜRKÇE yaz.
-Şu anki saat {datetime.now().strftime('%H:%M')}.
-Konuşmanın TAM OLARAK ilk mesajında bir kez '{selamlama}' de.
-Kullanıcı senden dosya göndermesini veya almasını isteyebilir.
-E�er dosya isteği varsa sadece JSON formatında yanıt ver:
+    if 6 <= saat < 12: selamlama = "GÃ¼naydÄ±n"
+    elif 12 <= saat < 18: selamlama = "Ä°yi gÃ¼nler"
+    elif 18 <= saat < 22: selamlama = "Ä°yi akÅŸamlar"
+    else: selamlama = "Ä°yi geceler"
+    return f"""Sen NexBridge adlÄ± bir asistansÄ±n.
+KESÄ°NLÄ°KLE SADECE TÃœRKÃ‡E yaz.
+Åžu anki saat {datetime.now().strftime('%H:%M')}.
+KonuÅŸmanÄ±n TAM OLARAK ilk mesajÄ±nda bir kez '{selamlama}' de.
+KullanÄ±cÄ± senden dosya gÃ¶ndermesini veya almasÄ±nÄ± isteyebilir.
+EŸer dosya isteÄŸi varsa sadece JSON formatÄ±nda yanÄ±t ver:
 {{"islem": "gonder", "dosya": "dosya_adi.txt"}}
 Yoksa normal sohbet et."""
 
@@ -67,7 +67,7 @@ def ngrok_url_endpoint():
 
 @app.route("/")
 def index():
-    return jsonify({"mesaj": "NexBridge çalışıyor!"})
+    return jsonify({"mesaj": "NexBridge Ã§alÄ±ÅŸÄ±yor!"})
 
 @app.route("/komut", methods=["POST"])
 def komut():
@@ -115,7 +115,7 @@ def oneri_gonder():
         "oneri": data.get("oneri", ""),
         "tarih": datetime.now().strftime("%d.%m.%Y %H:%M:%S")
     })
-    return jsonify({"mesaj": "Önerin alındı, teşekkürler!"})
+    return jsonify({"mesaj": "Ã–nerin alÄ±ndÄ±, teÅŸekkÃ¼rler!"})
 
 @app.route("/admin/giris", methods=["POST"])
 def admin_giris():
@@ -142,7 +142,7 @@ def admin_sifirla():
     if data.get("sifre") != ADMIN_SIFRE:
         return jsonify({"hata": "Yetkisiz"}), 403
     sohbet_gecmisi = []
-    return jsonify({"mesaj": "Sohbet sıfırlandı!"})
+    return jsonify({"mesaj": "Sohbet sÄ±fÄ±rlandÄ±!"})
 
 @app.route("/admin/cihaz-kes", methods=["POST"])
 def cihaz_kes():
@@ -152,7 +152,7 @@ def cihaz_kes():
     ip = data.get("ip")
     if ip in bagli_cihazlar:
         del bagli_cihazlar[ip]
-    return jsonify({"mesaj": f"{ip} bağlantısı kesildi!"})
+    return jsonify({"mesaj": f"{ip} baÄŸlantÄ±sÄ± kesildi!"})
 
 @app.route("/admin/oneri-sil", methods=["POST"])
 def oneri_sil():
@@ -163,14 +163,14 @@ def oneri_sil():
     idx = data.get("idx")
     if idx is not None and 0 <= idx < len(oneriler):
         oneriler.pop(idx)
-    return jsonify({"mesaj": "Öneri silindi!"})
+    return jsonify({"mesaj": "Ã–neri silindi!"})
 
 @app.route("/dosya/gonder/<dosya_adi>", methods=["GET"])
 def dosya_gonder(dosya_adi):
     yol = os.path.join(os.path.expanduser("~"), "Desktop", dosya_adi)
     if os.path.exists(yol):
         return send_file(yol, as_attachment=True)
-    return jsonify({"hata": "Dosya bulunamadı"}), 404
+    return jsonify({"hata": "Dosya bulunamadÄ±"}), 404
 
 @app.route("/dosya/al", methods=["POST"])
 def dosya_al():
@@ -179,16 +179,17 @@ def dosya_al():
     dosya = request.files["dosya"]
     kayit_yolu = os.path.join(os.path.expanduser("~"), "Desktop", dosya.filename)
     dosya.save(kayit_yolu)
-    return jsonify({"mesaj": f"{dosya.filename} masaüstüne kaydedildi!"})
+    return jsonify({"mesaj": f"{dosya.filename} masaÃ¼stÃ¼ne kaydedildi!"})
 
 @app.route("/sifirla", methods=["POST"])
 def sifirla():
     global sohbet_gecmisi
     sohbet_gecmisi = []
-    return jsonify({"mesaj": "Sohbet sıfırlandı"})
+    return jsonify({"mesaj": "Sohbet sÄ±fÄ±rlandÄ±"})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    print(f"\n✅ NexBridge çalışıyor!")
-    print(f"🚀 Port: {port}\n")
+    print(f"\nâœ… NexBridge Ã§alÄ±ÅŸÄ±yor!")
+    print(f"ðŸš€ Port: {port}\n")
+port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
